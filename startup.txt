@@ -1,0 +1,15 @@
+IN PROJECT DIRECTORY OPEN CMD
+
+IN COMMAND PROMPT: conda avtivate python-chatbot
+
+#TO RUN BACKEND
+
+cd backend
+
+uvicorn app:app --reload
+
+#TO RUN FRONTEND
+
+IN FRONTEND DIRECTORY
+
+npm run dev
