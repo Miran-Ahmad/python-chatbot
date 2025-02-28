@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
+import QR from "./assets/qr.png";
 
 const App = () => {
   const [message, setMessage] = useState("");
@@ -34,16 +35,19 @@ const App = () => {
     ]);
 
     try {
-      const response = await fetch(`http://localhost:8000/chat/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message,
-          conversation_id: conversationId, // Send the conversation_id with the message
-        }),
-      });
+      const response = await fetch(
+        `https://python-chatbot-8kjt.onrender.com/chat/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message,
+            conversation_id: conversationId,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Error with API request");
@@ -64,17 +68,39 @@ const App = () => {
   };
 
   return (
-    <div className="bg-zinc-950 fixed inset-0 flex justify-center items-center p-4">
-      <div className="w-full max-w-lg bg-zinc-900 rounded-lg shadow-lg p-4 sm:p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-xl text-white sm:text-2xl font-semibold">
-            AI Chatbot
-          </h1>
+    <div className="bg-white fixed inset-0 flex justify-center items-center">
+      <div className="hidden sm:block">
+        {/* <img src={QR} height={200} width={200} /> */}
+        <div className="card bg-base-100 w-96 shadow-xl rounded-2xl">
+          <figure className="px-10 pt-10">
+            <img src={QR} alt="Shoes" />
+          </figure>
+          <div className="card-body items-center text-center">
+            <h2 className="card-title p-4">Scan this QR Code</h2>
+            <p className="pb-4">
+              Or visit{" "}
+              <a href="https://miran-chatbot.netlify.app/">
+                <span className="text-blue-900">
+                  https://miran-chatbot.netlify.app/
+                </span>
+              </a>{" "}
+              <br />
+              on your Smartphone
+            </p>
+            <div className="card-actions">
+              {/* <button className="btn btn-primary">Buy Now</button> */}
+            </div>
+          </div>
         </div>
-
+      </div>
+      <div className="w-full h-full sm:max-w-lg sm:w-full sm:h-full bg-white rounded-none shadow-2xl p-6 flex flex-col sm:hidden">
+        <div className="flex justify-between items-center mb-5">
+          <h1 className="text-2xl text-black">Zylo AI</h1>
+        </div>
+        {/* <hr className="mb-6 text-black" /> */}
         <div
           ref={chatContainerRef}
-          className="overflow-y-auto h-96 space-y-4 mb-4 p-4 border border-zinc-900 rounded-lg "
+          className="flex-1 overflow-y-auto space-y-4 mb-5 bg-white rounded-xl shadow-inner p-2"
         >
           {chatHistory.map((msg, index) => (
             <div
@@ -84,10 +110,10 @@ const App = () => {
               }`}
             >
               <div
-                className={`max-w-xs p-3 rounded-lg ${
+                className={`max-w-xs py-2 px-5 rounded-full shadow-md text-sm md:text-base ${
                   msg.sender === "user"
-                    ? "bg-blue-600 text-white"
-                    : "bg-zinc-700 text-white"
+                    ? "bg-white text-black"
+                    : "shadow-none text-black"
                 }`}
               >
                 {msg.text}
@@ -97,28 +123,25 @@ const App = () => {
 
           {loading && (
             <div className="flex justify-start">
-              <div className="max-w-xs p-3 rounded-lg bg-gray-900 text-white animate-pulse">
-                AI is typing...
+              <div className="max-w-xs p-3 rounded-xl bg-white text-black animate-pulse shadow-md">
+                typing...
               </div>
             </div>
           )}
         </div>
 
         {isChatActive && (
-          <form
-            onSubmit={sendMessage}
-            className="flex flex-col sm:flex-row items-center  sm:space-x-2"
-          >
+          <form onSubmit={sendMessage} className="flex items-center space-x-3">
             <input
               type="text"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="w-full p-2 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-zinc-950 text-white text-sm sm:text-base"
-              placeholder="Type your message..."
+              className="w-full p-3 border border-gray-700 rounded-full focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white text-black text-sm md:text-base placeholder-black"
+              placeholder="Ask Anything"
             />
             <button
               type="submit"
-              className="bg-gray-600 text-white py-2 px-4 rounded-lg text-sm sm:text-base disabled:opacity-50"
+              className="bg-black text-white py-3 px-6 rounded-full text-sm md:text-base font-medium shadow-md hover:bg-gray-400 transition disabled:opacity-75"
               disabled={loading || !message.trim()}
             >
               Send
